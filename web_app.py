@@ -16,6 +16,7 @@ from pydantic import BaseModel, Field
 from nba_player_query import (
     DEFAULT_DATA_FILE,
     Player,
+    STAT_KEYS,
     build_players,
     extract_raw_players,
     filter_players,
@@ -38,6 +39,28 @@ TEAM_GRADE_BANDS = [
     {"min": 40, "grade": "D", "label": "乐透球队", "color": "#87909c"},
     {"min": 0, "grade": "F", "label": "摆烂大军", "color": "#e85d75"},
 ]
+
+
+def build_radar_caps(players: list[Player]) -> dict[str, dict[str, float]]:
+    caps: dict[str, dict[str, float]] = {
+        "ratio": {},
+        "score": {},
+        "raw": {},
+    }
+    for stat in STAT_KEYS:
+        raw_values = [getattr(player, stat) or 0 for player in players]
+        ratio_values = [
+            player.detail["ratios"][stat] or 0
+            for player in players
+        ]
+        score_values = [
+            player.detail["stat_scores"][stat] or 0
+            for player in players
+        ]
+        caps["raw"][stat] = round(max(raw_values, default=1), 4) or 1
+        caps["ratio"][stat] = round(max(ratio_values, default=1), 4) or 1
+        caps["score"][stat] = round(max(score_values, default=1), 4) or 1
+    return caps
 
 
 class LineupRequest(BaseModel):
@@ -77,6 +100,7 @@ def make_app(data_file: Path = DEFAULT_DATA_FILE) -> FastAPI:
             "rating_100": sum(1 for player in playable if player.rating == 100),
             "rating_95": sum(1 for player in playable if player.rating >= 95),
             "grade_bands": TEAM_GRADE_BANDS,
+            "radar_caps": build_radar_caps(players),
         }
 
     @app.get("/api/players")

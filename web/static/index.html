@@ -13,8 +13,19 @@
           <div class="kicker">Hupu 82-0 Data Lab</div>
           <h1>NBA 球员评分实验室</h1>
         </div>
-        <div class="meta-strip" id="metaStrip">
-          <span>加载数据中</span>
+        <div class="topbar-panel">
+          <button
+            id="themeToggleBtn"
+            class="theme-toggle"
+            type="button"
+            aria-label="切换亮色或暗色主题"
+            title="切换亮色/暗色"
+          >
+            跟随系统
+          </button>
+          <div class="meta-strip" id="metaStrip">
+            <span>加载数据中</span>
+          </div>
         </div>
       </header>
 
@@ -103,6 +114,18 @@
         </section>
 
         <aside class="analysis-rail" aria-label="评分明细和阵容模拟">
+          <section class="radar-controls" aria-label="多边形维度图口径">
+            <div>
+              <h2>维度口径</h2>
+              <p id="radarModeHint">公式标准化：相对年代基准</p>
+            </div>
+            <div class="segmented" id="radarModeControl">
+              <button type="button" data-radar-mode="ratio" class="active">公式</button>
+              <button type="button" data-radar-mode="score">贡献</button>
+              <button type="button" data-radar-mode="raw">原始</button>
+            </div>
+          </section>
+
           <section class="inspector">
             <div class="rail-title">
               <h2>评分明细</h2>
@@ -119,6 +142,7 @@
               <button id="clearLineupBtn" type="button">清空</button>
             </div>
             <div id="lineupSlots" class="slot-stack"></div>
+            <div id="lineupRadar" class="lineup-radar"></div>
             <div id="simulationResult" class="sim-result muted">
               需要填满 PG、SG、SF、PF、C 五个位置。
             </div>
