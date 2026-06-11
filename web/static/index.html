@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>NBA 82-0 球员评分实验室</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <div class="kicker">Hupu 82-0 Data Lab</div>
+          <h1>NBA 球员评分实验室</h1>
+        </div>
+        <div class="meta-strip" id="metaStrip">
+          <span>加载数据中</span>
+        </div>
+      </header>
+
+      <section class="control-deck" aria-label="查询条件">
+        <form id="filterForm" class="filter-grid">
+          <label>
+            <span>姓名</span>
+            <input id="nameInput" name="name" placeholder="詹姆斯 / Jordan / curry" autocomplete="off" />
+          </label>
+          <label>
+            <span>年代</span>
+            <select id="decadeSelect" name="decade"></select>
+          </label>
+          <label>
+            <span>球队</span>
+            <select id="teamSelect" name="team"></select>
+          </label>
+          <label>
+            <span>位置</span>
+            <select id="positionSelect" name="position"></select>
+          </label>
+          <label>
+            <span>排序</span>
+            <select id="sortSelect" name="sort">
+              <option value="rating">评分</option>
+              <option value="total">PTS+REB+AST</option>
+              <option value="pts">PTS</option>
+              <option value="reb">REB</option>
+              <option value="ast">AST</option>
+              <option value="stl">STL</option>
+              <option value="blk">BLK</option>
+              <option value="name">姓名</option>
+            </select>
+          </label>
+          <label>
+            <span>数量</span>
+            <select id="limitSelect" name="limit">
+              <option value="30">30</option>
+              <option value="50" selected>50</option>
+              <option value="100">100</option>
+              <option value="200">200</option>
+            </select>
+          </label>
+          <label class="checkline">
+            <input id="detailsToggle" type="checkbox" />
+            <span>显示评分明细列</span>
+          </label>
+          <label class="checkline">
+            <input id="include1950sToggle" type="checkbox" />
+            <span>包含 1950s</span>
+          </label>
+          <div class="actions">
+            <button class="primary" type="submit">查询</button>
+            <button type="button" id="resetBtn">重置</button>
+          </div>
+        </form>
+      </section>
+
+      <main class="workspace">
+        <section class="data-pane" aria-label="球员列表">
+          <div class="pane-head">
+            <div>
+              <h2>球员榜单</h2>
+              <p id="resultHint">按评分降序展示</p>
+            </div>
+            <div class="pane-actions">
+              <button id="orderBtn" type="button" data-order="desc">降序</button>
+              <button id="exportBtn" type="button">导出当前页 CSV</button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table id="playersTable">
+              <thead></thead>
+              <tbody>
+                <tr>
+                  <td>加载中</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="pager">
+            <button id="prevBtn" type="button">上一页</button>
+            <span id="pageLabel">-</span>
+            <button id="nextBtn" type="button">下一页</button>
+          </div>
+        </section>
+
+        <aside class="analysis-rail" aria-label="评分明细和阵容模拟">
+          <section class="inspector">
+            <div class="rail-title">
+              <h2>评分明细</h2>
+              <span id="selectedBadge">未选择</span>
+            </div>
+            <div id="playerDetail" class="empty-state">
+              从左侧表格选择一名球员，查看公式拆分并加入阵容。
+            </div>
+          </section>
+
+          <section class="lineup-lab">
+            <div class="rail-title">
+              <h2>阵容模拟</h2>
+              <button id="clearLineupBtn" type="button">清空</button>
+            </div>
+            <div id="lineupSlots" class="slot-stack"></div>
+            <div id="simulationResult" class="sim-result muted">
+              需要填满 PG、SG、SF、PF、C 五个位置。
+            </div>
+          </section>
+        </aside>
+      </main>
+    </div>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script src="/static/app.js" defer></script>
+  </body>
+</html>
